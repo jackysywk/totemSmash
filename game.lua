@@ -2,7 +2,7 @@
 local composer = require( "composer" )
 
 local scene = composer.newScene()
-
+local unityads = require("plugin.unityads.v4")
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
@@ -22,7 +22,7 @@ local red_button
 local green_button
 local blue_button
 local numTotem = 50
-
+local gameState
 -- sound track
 local climbSound
 local wrongSound
@@ -34,8 +34,10 @@ local function updateText()
 end
 
 local function updateTime(event)
-    timeSpent = timeSpent+0.1
-    timeText.text = string.format("Time: %.1f", timeSpent)
+    if (gameState==true) and (timeSpent~=nil) then
+        timeSpent = timeSpent+0.1
+        timeText.text = string.format("Time: %.1f", timeSpent)
+    end
 end
 
 
@@ -66,6 +68,7 @@ local function endGame()
     audio.play(whistleSound)
     composer.setVariable("finalScore", timeSpent)
     composer.gotoScene("highscores", {time=800, effect="crossFade"})
+    gameState=false
 end
 
 local function gameOver()
@@ -74,6 +77,7 @@ local function gameOver()
 end
 local function nextStep()
     if (lives == 0) then
+        
         gameOver()
     end
     if (numTotem >0) then
@@ -139,9 +143,9 @@ end
 
 -- create()
 function scene:create( event )
-
+    gameState= true
+    unityads.load("Interstitial_Android")
 	local sceneGroup = self.view
-
     -- Set up display groups
     backGroup = display.newGroup()  -- Display group for the background image
     sceneGroup:insert( backGroup )  -- Insert into the scene's view group
@@ -200,6 +204,7 @@ function scene:show( event )
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
 
 	elseif ( phase == "did" ) then
+
 		-- Code here runs when the scene is entirely on screen
         for i=1,12,1 
         do
@@ -238,8 +243,8 @@ function scene:destroy( event )
     timer.performWithDelay(5000,audio.dispose(wrongSound))
     timer.performWithDelay(5000,audio.dispose(whistleSound))
     timer.performWithDelay(5000,audio.dispose(failSound))
-
-
+    display.remove(timeText)
+    timeSpent = nil
 end
 
 

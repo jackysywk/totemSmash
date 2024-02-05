@@ -18,6 +18,7 @@ settings =
 	--
 	android =
 	{
+        minSdkVersion = "19",
 		usesPermissions =
 		{
 			"android.permission.INTERNET",
@@ -34,16 +35,24 @@ settings =
 		{
 			UIStatusBarHidden = false,
 			UILaunchStoryboardName = "LaunchScreen",
+			NSUserTrackingUsageDescription = "Your data will be used to provide you a better and personalized ad experience.",
+            SKAdNetworkItems = {
+                { SKAdNetworkIdentifier = "4dzt52r2t5.skadnetwork" },
+                { SKAdNetworkIdentifier = "bvpn9ufa9b.skadnetwork" },
+            },
 		},
 	},
 
 	--
 	-- Plugins section
 	--
-	plugins =
-	{
-
-	},
+    plugins =
+    {
+        ["plugin.unityads.v4"] =
+        {
+            publisherId = "com.solar2d"
+        },
+    },
 
 	--
 	-- Project section

@@ -2,7 +2,14 @@
 local composer = require( "composer" )
 
 local scene = composer.newScene()
-
+local unityads = require("plugin.unityads.v4")
+local function showads()
+    if (unityads.isLoaded("Interstitial_Android")) then
+        unityads.show("Interstitial_Android")
+    else 
+        unityads.load("Interstitial_Android")
+    end
+end
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
@@ -13,6 +20,7 @@ local scoresTable = {}
 local filePath = system.pathForFile("scores.json", system.DocumentsDirectory)
 local musicTrack
 local function gotoMenu()
+	showads()
     composer.gotoScene( "menu", { time=800, effect="crossFade" } )
 end
 local function loadScores()
@@ -50,7 +58,6 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 	loadScores()
-
 	table.insert(scoresTable, composer.getVariable("finalScore"))
 	composer.setVariable("finalScore",0)
 	-- sort the table entries

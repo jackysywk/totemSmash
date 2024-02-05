@@ -2,17 +2,24 @@
 local composer = require( "composer" )
 
 local scene = composer.newScene()
-
+local unityads = require("plugin.unityads.v4")
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+
+local function showads()
+    if (unityads.isLoaded("Interstitial_Android")) then
+        unityads.show("Interstitial_Android")
+    else 
+        unityads.load("Interstitial_Android")
+    end
+end
 local function gotoMenu()
+    showads()
     composer.gotoScene( "menu", { time=800, effect="crossFade" } )
 end
-
-
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
